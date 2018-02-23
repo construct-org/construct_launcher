@@ -10,7 +10,8 @@ Configuration
 
 Create an `apps` section in your Project's config like...
 
-::
+.. code-block::
+
     apps:
         maya2017:
             host: 'maya'
