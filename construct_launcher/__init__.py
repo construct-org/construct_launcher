@@ -6,7 +6,7 @@ __description__ = 'Construct Launcher Actions'
 __version__ = '0.0.1'
 __author__ = 'Dan Bradham'
 __email__ = 'danielbradham@gmail.com'
-__license__ = 'No License'
+__license__ = 'MIT'
 __url__ = 'https://github.com/danbradham/construct_launcher'
 
 from construct_launcher.actions import *
