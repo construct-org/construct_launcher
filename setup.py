@@ -20,6 +20,7 @@ def get_meta(pyfile, readme):
 
     return meta
 
+
 meta = get_meta('./construct_launcher/__init__.py', 'README.rst')
 
 
@@ -46,6 +47,6 @@ setup(
     include_package_data=True,
     install_requires=[],
     entry_points={
-        'construct.plugins': 'construct_launcher = construct_launcher'
+        'construct.extensions': 'construct_launcher = construct_launcher'
     }
 )
