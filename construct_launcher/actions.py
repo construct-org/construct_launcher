@@ -6,7 +6,7 @@ __all__ = [
     'new_launcher',
 ]
 
-from construct import Action, types, config
+from construct import Action
 from construct.utils import platform
 from construct_launcher.constants import (
     SETUP_LAUNCH,
@@ -23,11 +23,11 @@ class BaseLauncher(Action):
     identifier = 'launch'
     description = 'Launch an application'
     priorities = [SETUP_LAUNCH, BEFORE_LAUNCH, LAUNCH, AFTER_LAUNCH]
-    parameters = {}
 
     # These are set by new_launcher and used by launcher tasks to launch
     # the application
     icon = None
+    default_workspace = None
     path = None
     args = None
     env = None
@@ -56,6 +56,7 @@ def new_launcher(name, data):
         dict(
             label=label,
             name=name,
+            default_workspace=data.get('default_workspace', None),
             identifier=identifier,
             description=data.get('description', label),
             icon=data.get('icon', DEFAULT_SOFTWARE_ICON),

@@ -9,6 +9,8 @@ __all__ = [
 
 import os
 import subprocess
+from construct import api
+from construct.errors import Fail, Skip, Disable
 from construct.types import Namespace
 from construct.tasks import (
     task,
@@ -18,8 +20,9 @@ from construct.tasks import (
     returns,
     store,
     params,
-    kwarg,
-    pass_args
+    pass_args,
+    available,
+    artifact
 )
 from construct_launcher.constants import SETUP_LAUNCH, LAUNCH
 
@@ -40,8 +43,43 @@ def setup_app(ctx, args):
         env=dict(action.env),
         cwd=entry.path,
         host=action.host,
+        task=ctx.task,
+        workspace=ctx.workspace,
+        default_workspace=action.default_workspace,
     )
     return app
+
+
+@task(priority=SETUP_LAUNCH)
+@pass_context
+@requires(success('setup_app'))
+@params(store('app'))
+@available(lambda ctx: ctx.task and not ctx.workspace)
+@returns(artifact('workspace'))
+def setup_workspace(ctx, app):
+    '''Setup a workspace for the current task'''
+
+    workspace = app.task.workspaces.name(app.host).one()
+    if not workspace and not app.default_workspace:
+        raise Disable('Could not find workspace for %s' % app.host)
+
+    artifact = False
+    if not workspace:
+        path_template = api.get_path_template('workspace')
+        template = api.get_template(app.default_workspace, 'workspace')
+
+        path = path_template.format(dict(
+            task=app.task.path,
+            workspace=app.host
+        ))
+        workspace = template.copy(path)
+        artifact = True
+
+    ctx.workspace = workspace
+    app.cwd = workspace.path
+
+    if artifact:
+        return workspace
 
 
 @task(priority=SETUP_LAUNCH)

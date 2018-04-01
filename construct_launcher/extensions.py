@@ -5,7 +5,12 @@ __all__ = ['Launcher']
 
 from construct.utils import missing
 from construct.extension import Extension, Config
-from construct_launcher.tasks import setup_app, build_app_env, launch_app
+from construct_launcher.tasks import (
+    setup_app,
+    setup_workspace,
+    build_app_env,
+    launch_app
+)
 from construct_launcher.actions import new_launcher
 
 
@@ -45,6 +50,7 @@ class Launcher(Extension):
         These are the core tasks used by the app luancher.'''
 
         self.add_task('launch.*', setup_app)
+        self.add_task('launch.*', setup_workspace)
         self.add_task('launch.*', build_app_env)
         self.add_task('launch.*', launch_app)
 
