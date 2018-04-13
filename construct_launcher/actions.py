@@ -35,7 +35,7 @@ class BaseLauncher(Action):
 
     @staticmethod
     def available(ctx):
-        return ctx.project
+        return ctx.task
 
 
 def new_launcher(name, data):
