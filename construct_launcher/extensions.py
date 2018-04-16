@@ -63,7 +63,8 @@ class Launcher(Extension):
         actions = {}
         for app_name, app_data in self.software.items():
             action = new_launcher(app_name, app_data)
-            actions[action.identifier] = action
+            if ctx is not missing and action.available(ctx):
+                actions[action.identifier] = action
         return actions
 
     def available(self, ctx):
