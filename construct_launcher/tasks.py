@@ -72,7 +72,15 @@ def setup_workspace(ctx, app):
             task=app.task.path,
             workspace=app.host
         ))
-        workspace = template.copy(path)
+
+        if os.path.exists(path):
+            import fsfs
+            workspace = fsfs.get_entry(path)
+            workspace.tag(*template.tags)
+            workspace.write(**template.read())
+        else:
+            workspace = template.copy(path)
+
         artifact = True
 
     ctx.workspace = workspace
