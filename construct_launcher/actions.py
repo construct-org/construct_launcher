@@ -15,6 +15,7 @@ from construct_launcher.constants import (
     AFTER_LAUNCH,
     DEFAULT_SOFTWARE_ICON
 )
+from cpenv.utils import preprocess_dict, dict_to_env
 
 
 class BaseLauncher(Action):
@@ -49,6 +50,12 @@ def new_launcher(name, data):
     else:
         identifier = 'launch.' + name
 
+    # Preprocess env dict
+    # expands variables
+    # extracts platform specific env vars
+    app_env = data.get('env', {})
+    app_env = dict_to_env(preprocess_dict(app_env))
+
     cmd = data['cmd'][platform]
     action = type(
         'Launch' + name.title(),
@@ -62,7 +69,7 @@ def new_launcher(name, data):
             icon=data.get('icon', DEFAULT_SOFTWARE_ICON),
             path=cmd['path'],
             args=cmd['args'],
-            env=data.get('env', {}),
+            env=app_env,
             host=data['host'],
         )
     )
