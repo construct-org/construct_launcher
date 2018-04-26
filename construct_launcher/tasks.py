@@ -10,6 +10,7 @@ __all__ = [
 import os
 import subprocess
 from construct import api
+from construct.utils import platform
 from construct.errors import Fail, Skip, Disable
 from construct.types import Namespace
 from construct.tasks import (
@@ -115,4 +116,17 @@ def launch_app(app):
     app_env = env_to_dict(app.env)
     env = dict_to_env(join_dicts(os_env, app_env))
 
-    subprocess.Popen(cmd, env=env, cwd=cwd)
+    run(cmd, env=env, cwd=cwd)
+
+
+def run(*args, **kwargs):
+    '''On Windows start a detached process in it's own process group.'''
+
+    if platform == 'win':
+        create_new_process_group = 0x00000200
+        detached_process = 0x00000008
+        creation_flags = detached_process | create_new_process_group
+        kwargs.setdefault('creationflags', creation_flags)
+
+    kwargs.setdefault('shell', True)
+    subprocess.Popen(*args, **kwargs)
