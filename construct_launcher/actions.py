@@ -44,11 +44,9 @@ def new_launcher(name, data):
 
     label = data.get('label', 'Launch ' + name.title())
 
-    identifier = data.get('identifier', None)
-    if identifier and not identifier.startswith('launch'):
+    identifier = data.get('identifier', 'launch.' + name)
+    if not identifier.startswith('launch'):
         identifier = 'launch.' + identifier
-    else:
-        identifier = 'launch.' + name
 
     # Preprocess env dict
     # expands variables
