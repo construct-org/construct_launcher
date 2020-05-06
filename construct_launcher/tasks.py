@@ -128,5 +128,9 @@ def run(*args, **kwargs):
         creation_flags = detached_process | create_new_process_group
         kwargs.setdefault('creationflags', creation_flags)
 
+    # Quick patch - not sure why some machines raise WinError 267
+    # when passing cwd to Popen.
+    kwargs.pop('cwd', None)
+
     kwargs.setdefault('shell', True)
     subprocess.Popen(*args, **kwargs)
