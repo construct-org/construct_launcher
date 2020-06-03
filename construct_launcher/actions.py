@@ -15,7 +15,7 @@ from construct_launcher.constants import (
     AFTER_LAUNCH,
     DEFAULT_SOFTWARE_ICON
 )
-from cpenv.utils import preprocess_dict, dict_to_env
+from cpenv.mappings import preprocess_dict, dict_to_env
 
 
 class BaseLauncher(Action):

@@ -26,7 +26,7 @@ from construct.tasks import (
     artifact
 )
 from construct_launcher.constants import SETUP_LAUNCH, LAUNCH
-from cpenv.utils import dict_to_env, env_to_dict, join_dicts
+from cpenv.mappings import dict_to_env, env_to_dict, join_dicts
 
 
 @task(priority=SETUP_LAUNCH)
@@ -112,7 +112,7 @@ def launch_app(app):
 
     cmd = [app.path] + app.args
     cwd = app.cwd
-    os_env = env_to_dict(os.environ.data)
+    os_env = env_to_dict(dict(os.environ))
     app_env = env_to_dict(app.env)
     env = dict_to_env(join_dicts(os_env, app_env))
 
